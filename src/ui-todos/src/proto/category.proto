@@ -1,0 +1,49 @@
+// Important: Please make modifications in the proto files located in the root directory to ensure they take effect.
+// Changes made in todos/src/proto and ui-todos/src/proto will be overwritten on build unless propagated to the root
+// directory.
+
+syntax = "proto3";
+
+package category_package;
+
+message Category {
+  string _id = 1;
+  string name = 2;
+  string color = 3;
+  string user = 4;
+}
+
+message GetCategoriesRequest {
+  string userId = 1;
+}
+
+message GetCategoriesResponse {
+  repeated Category categories = 1;
+}
+
+message CreateCategoryRequest {
+  string name = 1;
+  string color = 2;
+  string user = 3;
+}
+
+message UpdateCategoryRequest {
+  string _id = 1;
+  Category category = 2;
+}
+
+message DeleteCategoryRequest {
+  string _id = 1;
+}
+
+message DeleteCategoryResponse {
+  bool success = 1;
+}
+
+// Service definition
+service CategoryService {
+  rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse);
+  rpc CreateCategory(CreateCategoryRequest) returns (Category);
+  rpc UpdateCategory(UpdateCategoryRequest) returns (Category);
+  rpc DeleteCategory(DeleteCategoryRequest) returns (DeleteCategoryResponse);
+}

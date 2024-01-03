@@ -1,0 +1,73 @@
+// Important: Please make modifications in the proto files located in the root directory to ensure they take effect.
+// Changes made here will be overwritten on build unless propagated to the root directory.
+
+syntax = "proto3";
+
+package todo_package;
+
+enum TodoPriority {
+  TODO_PRIORITY_UNKNOWN = 0;
+  TODO_PRIORITY_LOW = 1;
+  TODO_PRIORITY_MEDIUM = 2;
+  TODO_PRIORITY_HIGH = 3;
+}
+
+enum TodoStatus {
+  TODO_STATUS_UNKNOWN = 0;
+  TODO_STATUS_NEW = 1;
+  TODO_STATUS_IN_PROGRESS = 2;
+  TODO_STATUS_DONE = 3;
+}
+
+message Todo {
+  string _id = 1;
+  string title = 2;
+  string task = 3;
+  string updatedBy = 4;
+  TodoStatus status = 5;
+  TodoPriority priority = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+}
+
+message GetTodoRequest {
+  string _id = 1;
+}
+
+message GetTodosRequest {
+  string taskId = 1;
+}
+
+message GetTodosResponse {
+  repeated Todo todos = 1;
+}
+
+message CreateTodoRequest {
+  string title = 1;
+  string task = 2;
+  string updatedBy = 3;
+  TodoStatus status = 4;
+  TodoPriority priority = 5;
+}
+
+message UpdateTodoRequest {
+  string _id = 1;
+  Todo todo = 2;
+}
+
+message DeleteTodoRequest {
+  string _id = 1;
+}
+
+message DeleteTodoResponse {
+  bool success = 1;
+}
+
+// Service definition
+service TodoService {
+  rpc GetTodo(GetTodoRequest) returns (Todo);
+  rpc GetTodos(GetTodosRequest) returns (GetTodosResponse);
+  rpc CreateTodo(CreateTodoRequest) returns (Todo);
+  rpc UpdateTodo(UpdateTodoRequest) returns (Todo);
+  rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse);
+}

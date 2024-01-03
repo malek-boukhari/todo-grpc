@@ -1,0 +1,93 @@
+// Important: Please make modifications in the proto files located in the root directory to ensure they take effect.
+// Changes made here will be overwritten on build unless propagated to the root directory.
+
+syntax = "proto3";
+
+package user_package;
+
+message Avatar {
+  string sex = 1;
+  string hairStyle = 2;
+  string hairColor = 3;
+  string faceColor = 4;
+  string eyeStyle = 5;
+  string earSize = 6;
+  string noseStyle = 7;
+  string mouthStyle = 8;
+  string glassesStyle = 9;
+  string hatStyle = 10;
+  string hatColor = 11;
+  string shirtStyle = 12;
+  string shirtColor = 13;
+  string bgColor = 14;
+}
+
+message User {
+  string _id = 1;
+  string email = 2;
+  string username = 3;
+  Avatar avatar = 4;
+}
+
+message RegisterRequest {
+  message RegisterFields {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+  }
+
+  RegisterFields user = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+message GetUsersRequest {
+  string userName = 1;
+}
+
+message GetUsersResponse {
+  repeated User users = 1;
+}
+
+message UpdateUserRequest {
+  string _id = 1;
+  User user = 2;
+}
+
+message SecurityFields {
+  string currentPassword = 1;
+  string newPassword = 2;
+}
+
+message UpdatePasswordRequest {
+  string _id = 1;
+  SecurityFields security = 2;
+}
+
+message UpdatePasswordResponse {
+  bool success = 1;
+}
+
+message DeleteUserRequest {
+  string _id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+}
+
+service UserService {
+  rpc Register(RegisterRequest) returns (User);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (User);
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+}

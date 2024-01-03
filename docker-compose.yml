@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  ui-todos:
+    platform: linux/amd64
+    build:
+      context: ./src/ui-todos
+    volumes:
+      - ./src/ui-todos:/code
+    command: npm run dev
+    ports:
+      - "33000:33000"
+    networks:
+      - app-network
+    depends_on:
+      todos:
+        condition: service_started
+      todos-db:
+        condition: service_started
+      envoy:
+        condition: service_started
+
+  todos:
+    platform: linux/amd64
+    build:
+      context: ./src/todos
+    volumes:
+      - ./src/todos:/code
+    env_file:
+      - ./src/todos/.env
+    working_dir: /code
+    ports:
+      - "8035:8035"
+    networks:
+      - app-network
+    depends_on:
+      - todos-db
+
+  envoy:
+    platform: linux/amd64
+    build:
+      context: ./gateway
+    ports:
+      - "9002:9002"
+      - "8086:8086"
+    volumes:
+      - ./gateway/envoy.yaml:/etc/envoy/envoy.yaml
+    networks:
+      - app-network
+
+  todos-db:
+    platform: linux/amd64
+    build:
+      context: ./src/todos/todos-db
+    ports:
+      - "27034:27034"
+    volumes:
+      - ./src/todos/todos-db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - todos-db:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  todos-db:

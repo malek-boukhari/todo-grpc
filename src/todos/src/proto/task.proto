@@ -1,0 +1,85 @@
+// Important: Please make modifications in the proto files located in the root directory to ensure they take effect.
+// Changes made here will be overwritten on build unless propagated to the root directory.
+
+syntax = "proto3";
+
+package task_package;
+
+import "category.proto";
+import "user.proto";
+
+message Task {
+  string _id = 1;
+  string title = 2;
+  string description = 3;
+  string user = 4;
+  repeated string collaborators = 5;
+  repeated string todos = 6;
+  string category = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+}
+
+message PopulatedTask {
+  string _id = 1;
+  string title = 2;
+  string description = 3;
+  string user = 4;
+  repeated user_package.User collaborators = 5;
+  repeated string todos = 6;
+  category_package.Category category = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+}
+
+message GetLastUpdatedTasksRequest {
+  string collaboratorId = 1;
+}
+
+message GetTasksRequest {
+  string collaboratorId = 1;
+  string title = 2;
+}
+
+message GetTasksResponse {
+  repeated PopulatedTask tasks = 1;
+}
+
+message GetTaskRequest {
+  string _id = 1;
+}
+
+message GetTaskResponse {
+  PopulatedTask task = 1;
+}
+
+message CreateTaskRequest {
+  string title = 1;
+  string description = 2;
+  string user = 3;
+  repeated string collaborators = 4;
+  string category = 5;
+}
+
+message UpdateTaskRequest {
+  string _id = 1;
+  Task task = 2;
+}
+
+message DeleteTaskRequest {
+  string _id = 1;
+}
+
+message DeleteTaskResponse {
+  bool success = 1;
+}
+
+// Service definition
+service TaskService {
+  rpc GetTasks(GetTasksRequest) returns (GetTasksResponse);
+  rpc GetLastUpdatedTasks(GetLastUpdatedTasksRequest) returns (GetTasksResponse);
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
+  rpc CreateTask(CreateTaskRequest) returns (Task);
+  rpc UpdateTask(UpdateTaskRequest) returns (Task);
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
+}

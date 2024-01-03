@@ -1,0 +1,24 @@
+{
+  "name": "todo-grpc",
+  "version": "1.0.0",
+  "description": "Control Tour",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.11.0",
+    "@types/yaml": "^1.2.0",
+    "chalk": "^2.4.2",
+    "mkdirp": "^0.5.1",
+    "ts-node": "^8.8.2",
+    "yaml": "^1.3.2"
+  },
+  "devDependencies": {
+    "husky": "^4.3.0",
+    "typescript": "^5.2.2"
+  }
+}

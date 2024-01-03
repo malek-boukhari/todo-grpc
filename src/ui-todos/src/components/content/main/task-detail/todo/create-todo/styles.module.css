@@ -1,0 +1,56 @@
+.createTodoCard {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.transition {
+    transition: all 0.2s ease-in-out;
+}
+
+.hidden {
+    max-height: 0;
+    overflow: hidden;
+    border-color: transparent;
+    margin-top: 0;
+    padding: 0;
+}
+
+.visible {
+    max-height: 99px;
+    overflow: visible;
+    margin-top: 16px;
+    padding: 16px 23px 16px 12px;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 0.2fr;
+    gap: 8px;
+    width: 100%;
+}
+
+.label {
+    margin: 0;
+    padding-left: 11px;
+    font-size: 13px;
+    color: #8c8c8c;
+}
+
+.input {
+    min-width: 203px;
+}
+
+.select {
+    min-width: 120px;
+    border: none;
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+}

@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.customCard {
+    border: 1px solid #ebebeb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline-color: #ebebeb;
+    padding: 12px 23px;
+    margin-top: 16px;
+}
+
+.title {
+    width: 203px;
+    color: #8c8c8c;
+}
+
+.status {
+    width: 85px;
+}
+
+.priority,
+.status,
+.progress,
+.deleteButton {
+    text-align: center;
+}
+
+.statusText {
+    color: rgb(23,50,77);
+}

@@ -1,0 +1,28 @@
+.taskHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    margin: 0 0 16px !important;
+}
+
+.avatarGroup {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.secondaryText {
+    color: #bfbfbf;
+}
+
+.description {
+    margin-top: 16px !important;
+}

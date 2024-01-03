@@ -1,0 +1,27 @@
+FROM node:18-bullseye-slim
+
+SHELL ["/bin/bash", "-c"]
+
+COPY . /code
+WORKDIR /code
+
+# Install protobuf-compiler
+RUN apt-get update -y && \
+    apt-get install -y protobuf-compiler && \
+    apt-get clean
+
+RUN apt-get install build-essential -y
+RUN apt-get install wget curl -y
+
+COPY package.json ./
+COPY package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# TODO fix Running gen-proto.sh script at build failure
+
+
+# Generate proto code & serve
+CMD ["/bin/bash", "-c", "./scripts/gen-proto.sh && npm run dev"]
+

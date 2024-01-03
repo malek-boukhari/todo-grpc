@@ -1,0 +1,19 @@
+FROM node:14-buster-slim
+
+SHELL ["/bin/bash", "-c"]
+
+COPY . /code
+WORKDIR /code
+
+# Install protobuf-compiler
+RUN apt-get update -y && \
+    apt-get install -y protobuf-compiler && \
+    apt-get clean
+
+COPY package.json ./
+COPY package-lock.json ./
+
+RUN npm install
+
+# Generate proto code
+RUN npm run gen:proto

@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.configSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 250px;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.colorPicker {
+    justify-content: left;
+    padding: 11px;
+}
+
+.avatarWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.avatar {
+    width: 8rem;
+    height: 8rem;
+}
+
+.submitButton {
+    margin-top: 24px;
+}

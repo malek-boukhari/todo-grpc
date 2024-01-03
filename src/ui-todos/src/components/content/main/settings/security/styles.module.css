@@ -1,0 +1,11 @@
+.container {
+    max-width: 400px;
+}
+
+.securityTitle {
+    margin: 8px 0 24px;
+}
+
+.submitButton {
+    margin-bottom: 0;
+}
