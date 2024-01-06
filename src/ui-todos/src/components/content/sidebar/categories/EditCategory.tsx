@@ -92,8 +92,10 @@ function EditCategory(): JSX.Element {
                     <label htmlFor="editCategoryNameInput">Category name</label>
                     <Input
                         id="editCategoryNameInput"
+                        placeholder={'Enter category name'}
                         value={categoryName}
                         onChange={(e) => setCategoryName(e.target.value)}
+                        style={{ minWidth: 250 }}
                     />
                 </Space>
 
@@ -102,12 +104,13 @@ function EditCategory(): JSX.Element {
                     <ColorPicker
                         value={categoryColor}
                         onChange={(color) => setCategoryColor(color.toHexString())}
+                        style={{ minWidth: 250, justifyContent: 'left', padding: 11 }}
                         showText
                     />
                 </Space>
             </Space>
 
-            <div style={{ margin: '16px 0 0' }}>
+            <div style={{ margin: '24px 0 0' }}>
                 <Button type="primary" onClick={onFinish}>
                     Submit
                 </Button>

@@ -125,7 +125,7 @@ function EditTodo(): JSX.Element {
                         value={priority}
                         onChange={(value) => setPriority(value)}
                         options={priorityMenuItems}
-                        style={{ minWidth: 115 }}
+                        style={{ minWidth: 250 }}
                     />
                 </Space>
 
@@ -136,7 +136,7 @@ function EditTodo(): JSX.Element {
                         placeholder="Change Status"
                         value={status}
                         onChange={(value) => setStatus(value)}
-                        style={{ minWidth: 115 }}
+                        style={{ minWidth: 250 }}
                         options={[
                             { value: TodoStatus.NEW, label: 'New' },
                             { value: TodoStatus.IN_PROGRESS, label: 'In progress' },
@@ -146,7 +146,7 @@ function EditTodo(): JSX.Element {
                 </Space>
             </Space>
 
-            <div style={{ marginBottom: 0 }}>
+            <div style={{ margin: '24px 0 0 0' }}>
                 <Button type="primary" onClick={onFinish}>
                     Submit
                 </Button>

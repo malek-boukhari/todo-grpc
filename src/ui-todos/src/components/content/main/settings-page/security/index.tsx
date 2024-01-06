@@ -44,6 +44,7 @@ function Security(): JSX.Element {
                     rules={[{ required: true }]}
                 >
                     <Password
+                        placeholder={'Enter current password'}
                         visibilityToggle={{
                             visible: passwordVisible,
                             onVisibleChange: setPasswordVisible
@@ -57,6 +58,7 @@ function Security(): JSX.Element {
                     rules={[{ required: true }]}
                 >
                     <Password
+                        placeholder={'Enter new password'}
                         visibilityToggle={{
                             visible: passwordVisible,
                             onVisibleChange: setPasswordVisible
@@ -80,6 +82,7 @@ function Security(): JSX.Element {
                     ]}
                 >
                     <Password
+                        placeholder={'Enter new password'}
                         visibilityToggle={{
                             visible: repeatPasswordVisible,
                             onVisibleChange: setRepeatPasswordVisible

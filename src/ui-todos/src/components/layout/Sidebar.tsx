@@ -1,59 +1,42 @@
-import { JSX, useEffect, useState } from 'react';
-import { Divider, Layout, Menu, MenuProps, theme } from 'antd';
+import { useEffect } from 'react';
+import { Layout, Menu, MenuProps, theme } from 'antd';
 import { TagsOutlined, FileDoneOutlined, PlusOutlined } from '@ant-design/icons';
 import { PopulatedTask } from '../../generated/task_pb.ts';
+import { Category } from '../../generated/category_pb.ts';
 import { useCategoryStore } from '../../store/Category.store.ts';
 import { useUserStore } from '../../store/User.store.ts';
-import { Category } from '../../generated/category_pb.ts';
 import { useTaskStore } from '../../store/Task.store.ts';
-import { debounce } from '../../utils/debounce.ts';
 import { useAppSettingsStore } from '../../store/AppSettings.store.ts';
 import CategoryLabel from '../content/sidebar/categories/CategoryLabel.tsx';
-import SearchTasks from '../content/sidebar/tasks/SearchTasks.tsx';
 import TaskLabel from '../content/sidebar/tasks/TaskLabel.tsx';
+import CreateCategory from '../content/sidebar/categories/CreateCategory.tsx';
+import EditCategory from '../content/sidebar/categories/EditCategory.tsx';
+import DeleteCategory from '../content/sidebar/categories/DeleteCategory.tsx';
+import CreateTask from '../content/sidebar/tasks/CreateTask.tsx';
+import type { JSX } from 'react';
 
 function Sidebar(): JSX.Element {
-    const { getTasks, tasks, setShowCreateTask } = useTaskStore();
+    const { getLastUpdatedTasks, lastUpdatedTasks, setShowCreateTask } = useTaskStore();
     const { currentUser } = useUserStore();
     const { getCategories, categories, setShowCreateCategory } = useCategoryStore();
     const { isCategoryMenuDefaultOpen, isTaskMenuDefaultOpen, setIsLoading } =
         useAppSettingsStore();
 
-    const [title, setTitle] = useState<string>('');
-
     const { Sider } = Layout;
     const { useToken } = theme;
     const { colorBgContainer } = useToken().token;
 
-    // Get categories on page load
+    // Get Tasks and categories on page load
     useEffect(() => {
         setIsLoading(true);
+        getLastUpdatedTasks();
         getCategories();
         setIsLoading(false);
     }, [currentUser]);
 
-    // Get Tasks on page load or when the search input value changes
-    useEffect(() => {
-        setIsLoading(true);
-        fetchTasks();
-        setIsLoading(false);
-    }, [currentUser, title]);
-
-    function fetchTasks(): void {
-        const delay = title === '' ? 0 : 500;
-
-        const debouncedGetTasks = debounce(async () => {
-            await getTasks(title);
-        }, delay);
-
-        setIsLoading(true);
-        debouncedGetTasks();
-        setIsLoading(false);
-    }
-
     /*
      * Determines the default behaviour of the sidebar menus on page render.
-     * This behaviour is configurable in AppSettings component.
+     * This behaviour is configurable in AppSettings.tsx component.
      */
     function defaultOpenKeys(): string[] {
         const keys = [];
@@ -76,7 +59,7 @@ function Sidebar(): JSX.Element {
         };
     });
 
-    const taskItems = tasks.map((task: PopulatedTask) => {
+    const taskItems = lastUpdatedTasks.map((task: PopulatedTask) => {
         return {
             key: task.Id,
             label: <TaskLabel task={task} />,
@@ -88,7 +71,7 @@ function Sidebar(): JSX.Element {
         {
             key: 1,
             icon: <FileDoneOutlined />,
-            label: 'Tasks',
+            label: 'Last updated tasks',
             children: [
                 ...taskItems,
                 {
@@ -118,24 +101,29 @@ function Sidebar(): JSX.Element {
     ];
 
     return (
-        <Sider
-            style={{
-                background: colorBgContainer,
-                padding: '8px',
-                borderRight: '1px solid #d4d4d4'
-            }}
-            width={250}
-        >
-            <SearchTasks setTitle={setTitle} />
-            <Divider />
-            <Menu
-                theme="light"
-                mode="inline"
-                defaultOpenKeys={defaultOpenKeys()}
-                style={{ border: 'none' }}
-                items={menuItems}
-            />
-        </Sider>
+        <>
+            <CreateCategory />
+            <EditCategory />
+            <DeleteCategory />
+            <CreateTask />
+
+            <Sider
+                style={{
+                    background: colorBgContainer,
+                    padding: '8px',
+                    borderRight: '1px solid #d4d4d4'
+                }}
+                width={250}
+            >
+                <Menu
+                    theme="light"
+                    mode="inline"
+                    defaultOpenKeys={defaultOpenKeys()}
+                    style={{ border: 'none' }}
+                    items={menuItems}
+                />
+            </Sider>
+        </>
     );
 }
 

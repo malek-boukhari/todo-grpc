@@ -7,7 +7,14 @@ import { useTaskStore } from '../../../../../../store/Task.store.ts';
 import type { NotificationType, NotificationMessage } from '../../../../../../types';
 
 function DeleteTask(): JSX.Element {
-    const { currentTask, getTasks, setShowDeleteTask, showDeleteTask, deleteTask } = useTaskStore();
+    const {
+        currentTask,
+        getTasks,
+        getLastUpdatedTasks,
+        setShowDeleteTask,
+        showDeleteTask,
+        deleteTask
+    } = useTaskStore();
     const { setIsLoading } = useAppSettingsStore();
 
     const [api, contextHolder] = notification.useNotification();
@@ -35,6 +42,7 @@ function DeleteTask(): JSX.Element {
         if (isDeleted) {
             openNotification('success', deleteTaskSuccess);
             await getTasks('');
+            await getLastUpdatedTasks();
         } else {
             openNotification('error', deleteTaskError);
         }

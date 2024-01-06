@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
 import { TodoModel, ITodo } from '../entities/Todo';
+import { TaskModel } from '../entities/Task';
 
 @injectable()
 export class TodoRepository {
@@ -18,12 +19,6 @@ export class TodoRepository {
         return todos.map(todo => this.mapTodoToPlainObject(todo));
     }
 
-    // public async sortByTaskId(taskId: string, sortBy: string, order: any): Promise<ITodo> {
-    //     const todos = await TodoModel.find({ task: taskId }).sort({ sortBy: order }).exec();
-    //
-    //     return  todos.map(todo => this.mapTodoToPlainObject(todo));
-    // }
-
     public async createOne(todo: any): Promise<any> {
         const todoDb = new TodoModel({
             title: todo.title,
@@ -33,6 +28,9 @@ export class TodoRepository {
             task: todo.task
         });
         const createdTodo = await todoDb.save();
+
+        // Find the corresponding Task and update its updatedAt
+        await this.setTaskUpdatedAt(createdTodo.task);
 
         return {
             ...createdTodo.toObject(),
@@ -46,6 +44,9 @@ export class TodoRepository {
             { $set: { ...updateFields } },
             { returnOriginal: false }
         );
+
+        // Find the corresponding Task and update its updatedAt
+        await this.setTaskUpdatedAt(updatedTodo.task);
 
         return this.mapTodoToPlainObject(updatedTodo);
     }
@@ -69,5 +70,10 @@ export class TodoRepository {
             createdAt: todo.createdAt.toISOString(),
             updatedAt: todo.updatedAt.toISOString()
         };
+    }
+
+    // Updates the updatedAt field of the task
+    private async setTaskUpdatedAt(taskId: any): Promise<void> {
+        await TaskModel.updateOne({ _id: taskId }, { updatedAt: new Date() });
     }
 }

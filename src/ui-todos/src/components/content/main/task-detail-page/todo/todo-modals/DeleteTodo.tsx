@@ -5,8 +5,10 @@ import { errorNotification, successNotification } from '../../../../../../utils/
 import type { NotificationMessage, NotificationType } from '../../../../../../types';
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
 import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.ts';
+import { useTaskStore } from '../../../../../../store/Task.store.ts';
 
 function DeleteTodo(): JSX.Element {
+    const { getLastUpdatedTasks } = useTaskStore();
     const {
         setShouldReloadTodos,
         deleteTodo,
@@ -41,11 +43,11 @@ function DeleteTodo(): JSX.Element {
 
         setIsLoading(true);
         const isDeleted = await deleteTodo(currentTodo?.Id);
-        console.log('isDeleted', isDeleted);
 
         if (isDeleted) {
             openNotification('success', deleteTodoSuccess);
             setShouldReloadTodos(true);
+            await getLastUpdatedTasks();
         } else {
             openNotification('error', deleteTodoError);
         }

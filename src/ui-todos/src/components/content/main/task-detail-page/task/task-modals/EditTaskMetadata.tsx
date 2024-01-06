@@ -13,7 +13,14 @@ import type { NotificationMessage, NotificationType } from '../../../../../../ty
 function EditTaskMetadata(): JSX.Element {
     const { currentUser, getUsers, users } = useUserStore();
     const { isLoading, setIsLoading } = useAppSettingsStore();
-    const { currentTask, getTasks, setShowEditTask, showEditTask, updateTask } = useTaskStore();
+    const {
+        currentTask,
+        getTasks,
+        getLastUpdatedTasks,
+        setShowEditTask,
+        showEditTask,
+        updateTask
+    } = useTaskStore();
     const { categories } = useCategoryStore();
 
     const [api, contextHolder] = notification.useNotification();
@@ -81,6 +88,7 @@ function EditTaskMetadata(): JSX.Element {
         setIsLoading(true);
         await update(task);
         await getTasks('');
+        await getLastUpdatedTasks();
         setIsLoading(false);
         closeModal();
     }
@@ -148,7 +156,7 @@ function EditTaskMetadata(): JSX.Element {
                     />
                 </Form.Item>
 
-                <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
+                <Form.Item style={{ marginBottom: 0 }}>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>

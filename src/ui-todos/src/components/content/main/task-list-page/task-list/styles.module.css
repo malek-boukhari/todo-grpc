@@ -1,0 +1,33 @@
+.cardContainer {
+    margin-bottom: 16px;
+}
+
+.title {
+    margin-top: 0;
+    font-weight: normal;
+}
+
+.avatarGroup {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.tagContainer {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+.taskDescription {
+    margin: 16px 0;
+}
+
+.updatedAt {
+    font-size: 12px;
+}

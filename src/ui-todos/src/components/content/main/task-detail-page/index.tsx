@@ -11,7 +11,7 @@ import { useTaskStore } from '../../../../store/Task.store.ts';
 import { PopulatedTask } from '../../../../generated/task_pb.ts';
 import { useAppSettingsStore } from '../../../../store/AppSettings.store.ts';
 
-function TaskDetail(): JSX.Element {
+function TaskDetailPage(): JSX.Element {
     const { id } = useParams(); // Get the task ID from the URL params
 
     const { getTask, setCurrentTask } = useTaskStore();
@@ -55,4 +55,4 @@ function TaskDetail(): JSX.Element {
     );
 }
 
-export default TaskDetail;
+export default TaskDetailPage;

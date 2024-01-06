@@ -4,7 +4,7 @@ import { fetchByKey, keyExists } from '../utils/storage.ts';
 interface IAppSettingsStore {
     isLoading: boolean;
     setIsLoading: (loading: boolean) => void;
-    loadingCount: number;
+    loadingQueue: number;
     isDarkMode: boolean;
     setIsDarkMode: (isDarkMode: boolean) => void;
     isTaskMenuDefaultOpen: boolean;
@@ -15,7 +15,7 @@ interface IAppSettingsStore {
 
 const initialState: IAppSettingsStore = {
     isLoading: false,
-    loadingCount: 0,
+    loadingQueue: 0,
     setIsLoading: () => {},
     isDarkMode: fetchByKey('is_dark_mode') || false,
     setIsDarkMode: () => {},
@@ -35,14 +35,14 @@ export const useAppSettingsStore = create<IAppSettingsStore>((set) => {
 
         setIsLoading(isLoading: boolean) {
             set((state: IAppSettingsStore) => {
-                const loadingCount = isLoading
-                    ? state.loadingCount + 1
-                    : Math.max(0, state.loadingCount - 1);
+                const loadingQueue = isLoading
+                    ? state.loadingQueue + 1
+                    : Math.max(0, state.loadingQueue - 1);
 
                 return {
                     ...state,
-                    isLoading: loadingCount > 0,
-                    loadingCount
+                    isLoading: loadingQueue > 0,
+                    loadingQueue
                 };
             });
         },

@@ -49,7 +49,7 @@ function CreateTask(): JSX.Element {
             </Title>
             <Form layout={'vertical'} name="task" onFinish={onFinish} style={{ maxWidth: 600 }}>
                 <Form.Item name={['task', 'title']} label="Title" rules={[{ required: true }]}>
-                    <Input />
+                    <Input placeholder={'Enter task title'} />
                 </Form.Item>
 
                 <Form.Item
@@ -57,7 +57,7 @@ function CreateTask(): JSX.Element {
                     label="Description"
                     rules={[{ required: true }]}
                 >
-                    <Input.TextArea />
+                    <Input.TextArea placeholder={'Enter task description'} />
                 </Form.Item>
 
                 <Form.Item
@@ -79,14 +79,14 @@ function CreateTask(): JSX.Element {
                         filterOption={false}
                         mode="multiple"
                         onSearch={fetchUsers}
-                        placeholder="Select users"
+                        placeholder="Enter collaborator username"
                         notFoundContent={isLoading ? <Spin size="small" /> : null}
                         options={users}
                         fieldNames={{ label: 'username', value: 'Id' }}
                     />
                 </Form.Item>
 
-                <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
+                <Form.Item style={{ marginBottom: 0 }}>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>

@@ -5,7 +5,7 @@ import ChangeAvatar from './avatar';
 import AppSettings from './app-settings';
 import Account from './account';
 
-function Settings(): JSX.Element {
+function SettingsPage(): JSX.Element {
     const { token } = theme.useToken();
     const { Title } = Typography;
 
@@ -66,4 +66,4 @@ function Settings(): JSX.Element {
     );
 }
 
-export default Settings;
+export default SettingsPage;

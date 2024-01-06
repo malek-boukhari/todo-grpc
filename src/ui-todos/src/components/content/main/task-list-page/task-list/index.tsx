@@ -1,16 +1,43 @@
-import { Avatar, Card, Col, Row, Tag, Typography } from 'antd';
-import { useTaskStore } from '../../../../store/Task.store.ts';
-import { PopulatedTask } from '../../../../generated/task_pb.ts';
-import extendedDayJs from '../../../../config/dayjs.ts';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../task-detail/task/task-metadata/styles.module.css';
+import { Avatar, Card, Col, Row, Tag, Typography } from 'antd';
+import { useTaskStore } from '../../../../../store/Task.store.ts';
+import { PopulatedTask } from '../../../../../generated/task_pb.ts';
+import extendedDayJs from '../../../../../config/dayjs.ts';
+import { debounce } from '../../../../../utils/debounce.ts';
+import { useAppSettingsStore } from '../../../../../store/AppSettings.store.ts';
+import { useUserStore } from '../../../../../store/User.store.ts';
+import styles from './styles.module.css';
 import type { JSX } from 'react';
 
-function TasksList(): JSX.Element {
-    const { tasks } = useTaskStore();
+function TaskList(): JSX.Element {
+    const { tasks, getTasks } = useTaskStore();
+    const { currentUser } = useUserStore();
+    const { setIsLoading } = useAppSettingsStore();
+
+    const [title, _] = useState<string>('');
 
     const { Meta } = Card;
     const { Text, Title } = Typography;
+
+    // Get Tasks on page load or when the search input value changes
+    useEffect(() => {
+        setIsLoading(true);
+        fetchTasks();
+        setIsLoading(false);
+    }, [currentUser, title]);
+
+    function fetchTasks(): void {
+        const delay = title === '' ? 0 : 500;
+
+        const debouncedGetTasks = debounce(async () => {
+            await getTasks(title);
+        }, delay);
+
+        setIsLoading(true);
+        debouncedGetTasks();
+        setIsLoading(false);
+    }
 
     function findTaskOwner(task: PopulatedTask): string {
         const owner = task?.collaborators.find((collaborator) => (collaborator.Id = task?.user));
@@ -23,8 +50,8 @@ function TasksList(): JSX.Element {
             {tasks.map((task) => (
                 <Col key={task.Id} span={6}>
                     <Link to={`/task/${task.Id}`}>
-                        <Card hoverable style={{ marginBottom: 16 }}>
-                            <Title style={{ marginTop: 0, fontWeight: 'normal' }} level={3}>
+                        <Card hoverable className={styles.cardContainer}>
+                            <Title className={styles.title} level={3}>
                                 {task.title}
                             </Title>
 
@@ -45,20 +72,20 @@ function TasksList(): JSX.Element {
                                 </div>
                             </div>
 
-                            <div style={{ margin: '16px 0', display: 'flex', gap: 8 }}>
+                            <div className={styles.tagContainer}>
                                 <Tag color={task.category?.color}>{task.category?.name}</Tag>
                             </div>
 
-                            <div style={{ margin: '16px 0' }}>
+                            <div className={styles.taskDescription}>
                                 <Text>{task.description}</Text>
                             </div>
 
                             <div>
                                 <Meta
+                                    className={styles.updatedAt}
                                     description={`Last updated: ${extendedDayJs(
                                         task.updatedAt
                                     ).fromNow()}`}
-                                    style={{ fontSize: 12 }}
                                 ></Meta>
                             </div>
                         </Card>
@@ -69,4 +96,4 @@ function TasksList(): JSX.Element {
     );
 }
 
-export default TasksList;
+export default TaskList;

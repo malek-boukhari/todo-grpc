@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 import { Button, notification, Progress, Tag, theme } from 'antd';
+import Typography from 'antd/es/typography';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.ts';
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
@@ -7,7 +8,6 @@ import { mapStatusToString, priorityIcon } from '../../../../../../utils/mappers
 import { TodoStatus } from '../../../../../../generated/todo_pb.ts';
 import { errorNotification } from '../../../../../../utils/Notifications.ts';
 import extendedDayJs from '../../../../../../config/dayjs.ts';
-import Typography from 'antd/es/typography';
 import styles from './styles.module.css';
 
 function TodoDetail(props: any): JSX.Element {

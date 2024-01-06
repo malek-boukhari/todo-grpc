@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import Auth from '../components/auth';
 import PrivateRoute from './PrivateRoute.tsx';
-import Layout from '../components/Layout.tsx';
-import TaskDetail from '../components/content/main/task-detail';
-import TasksList from '../components/content/main/task-list';
-import Settings from '../components/content/main/settings';
+import Layout from '../components/layout';
+import TaskDetailPage from '../components/content/main/task-detail-page';
+import TaskListPage from '../components/content/main/task-list-page';
+import SettingsPage from '../components/content/main/settings-page';
 
 const routes: RouteObject[] = [
     {
@@ -21,15 +21,15 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: '',
-                        element: <TasksList />
+                        element: <TaskListPage />
                     },
                     {
                         path: 'task/:id',
-                        element: <TaskDetail />
+                        element: <TaskDetailPage />
                     },
                     {
                         path: '/settings',
-                        element: <Settings />
+                        element: <SettingsPage />
                     }
                 ]
             }

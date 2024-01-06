@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoRepository = void 0;
 const inversify_1 = require("inversify");
 const Todo_1 = require("../entities/Todo");
+const Task_1 = require("../entities/Task");
 let TodoRepository = class TodoRepository {
     async findOneById(id) {
         const todo = await Todo_1.TodoModel.findById(id);
@@ -30,6 +31,7 @@ let TodoRepository = class TodoRepository {
             task: todo.task
         });
         const createdTodo = await todoDb.save();
+        await this.setTaskUpdatedAt(createdTodo.task);
         return {
             ...createdTodo.toObject(),
             _id: createdTodo._id.toString()
@@ -37,6 +39,7 @@ let TodoRepository = class TodoRepository {
     }
     async updateOne(todoId, updateFields) {
         const updatedTodo = await Todo_1.TodoModel.findOneAndUpdate({ _id: todoId }, { $set: { ...updateFields } }, { returnOriginal: false });
+        await this.setTaskUpdatedAt(updatedTodo.task);
         return this.mapTodoToPlainObject(updatedTodo);
     }
     async deleteOne(id) {
@@ -56,6 +59,9 @@ let TodoRepository = class TodoRepository {
             createdAt: todo.createdAt.toISOString(),
             updatedAt: todo.updatedAt.toISOString()
         };
+    }
+    async setTaskUpdatedAt(taskId) {
+        await Task_1.TaskModel.updateOne({ _id: taskId }, { updatedAt: new Date() });
     }
 };
 exports.TodoRepository = TodoRepository;

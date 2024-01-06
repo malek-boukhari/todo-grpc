@@ -3,6 +3,7 @@ import { useTaskStore } from '../../../../../../store/Task.store.ts';
 import { Button, Input, Select, theme } from 'antd';
 import { ArrowRightOutlined, CloseOutlined } from '@ant-design/icons';
 import Paragraph from 'antd/es/typography/Paragraph';
+import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.ts';
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
 import { useUserStore } from '../../../../../../store/User.store.ts';
 import { TodoPriority, TodoStatus } from '../../../../../../generated/todo_pb.ts';
@@ -10,9 +11,10 @@ import { priorityIcon } from '../../../../../../utils/mappers.tsx';
 import styles from './styles.module.css';
 
 function CreateTodo(): JSX.Element {
-    const { currentTask } = useTaskStore();
+    const { currentTask, getLastUpdatedTasks } = useTaskStore();
     const { currentUser } = useUserStore();
     const { createTodo, setShouldReloadTodos, setShowCreateTodo, showCreateTodo } = useTodoStore();
+    const { setIsLoading } = useAppSettingsStore();
 
     const [title, setTitle] = useState('');
     const [priority, setPriority] = useState(TodoPriority.MEDIUM);
@@ -49,8 +51,11 @@ function CreateTodo(): JSX.Element {
             task: currentTask?.Id,
             updatedBy: currentUser.Id
         };
+
         await createTodo(newTodo);
         setShouldReloadTodos(true);
+        await getLastUpdatedTasks();
+        setIsLoading(false);
 
         // Reset input values
         setTitle('');

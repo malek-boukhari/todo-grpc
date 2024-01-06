@@ -69,7 +69,9 @@ function CreateCategory(): JSX.Element {
                     <Input
                         id="createCategoryNameInput"
                         value={categoryName}
+                        placeholder={'Enter category name'}
                         onChange={(e) => setCategoryName(e.target.value)}
+                        style={{ minWidth: 250 }}
                     />
                 </Space>
 
@@ -77,13 +79,14 @@ function CreateCategory(): JSX.Element {
                     <Text>Category color</Text>
                     <ColorPicker
                         value={categoryColor}
-                        onChange={(color) => setCategoryColor(color.toHexString())}
                         showText
+                        onChange={(color) => setCategoryColor(color.toHexString())}
+                        style={{ minWidth: 250, justifyContent: 'left', padding: 11 }}
                     />
                 </Space>
             </Space>
 
-            <div style={{ marginBottom: 0 }}>
+            <div style={{ margin: '24px 0 0' }}>
                 <Button type="primary" onClick={onFinish}>
                     Submit
                 </Button>
