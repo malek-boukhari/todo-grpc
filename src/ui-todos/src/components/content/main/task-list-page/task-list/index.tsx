@@ -1,43 +1,16 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Card, Col, Row, Tag, Typography } from 'antd';
 import { useTaskStore } from '../../../../../store/Task.store.ts';
 import { PopulatedTask } from '../../../../../generated/task_pb.ts';
 import extendedDayJs from '../../../../../config/dayjs.ts';
-import { debounce } from '../../../../../utils/debounce.ts';
-import { useAppSettingsStore } from '../../../../../store/AppSettings.store.ts';
-import { useUserStore } from '../../../../../store/User.store.ts';
 import styles from './styles.module.css';
 import type { JSX } from 'react';
 
 function TaskList(): JSX.Element {
-    const { tasks, getTasks } = useTaskStore();
-    const { currentUser } = useUserStore();
-    const { setIsLoading } = useAppSettingsStore();
-
-    const [title, _] = useState<string>('');
+    const { tasks } = useTaskStore(); // initial fetch done in TaskListControls component
 
     const { Meta } = Card;
     const { Text, Title } = Typography;
-
-    // Get Tasks on page load or when the search input value changes
-    useEffect(() => {
-        setIsLoading(true);
-        fetchTasks();
-        setIsLoading(false);
-    }, [currentUser, title]);
-
-    function fetchTasks(): void {
-        const delay = title === '' ? 0 : 500;
-
-        const debouncedGetTasks = debounce(async () => {
-            await getTasks(title);
-        }, delay);
-
-        setIsLoading(true);
-        debouncedGetTasks();
-        setIsLoading(false);
-    }
 
     function findTaskOwner(task: PopulatedTask): string {
         const owner = task?.collaborators.find((collaborator) => (collaborator.Id = task?.user));

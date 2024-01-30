@@ -14,6 +14,7 @@ import {
     GetLastUpdatedTasksRequest
 } from '../../generated/task_pb.ts';
 import type { PromiseClient, Transport } from '@connectrpc/connect';
+import { SortCriteria } from '../../types';
 
 export class TasksGateway {
     private readonly transport: Transport;
@@ -26,9 +27,18 @@ export class TasksGateway {
         this.client = createPromiseClient(TaskService, this.transport);
     }
 
-    async getTasks(userId: string, title: string): Promise<GetTasksResponse | null> {
+    async getTasks(
+        userId: string,
+        title: string,
+        sortCriteria: SortCriteria
+    ): Promise<GetTasksResponse | null> {
         try {
-            const request = new GetTasksRequest({ collaboratorId: userId, title });
+            const request = new GetTasksRequest({
+                collaboratorId: userId,
+                title,
+                sortBy: sortCriteria.sortBy,
+                sortOrder: sortCriteria.sortOrder
+            });
 
             return await this.client.getTasks(request);
         } catch (e) {

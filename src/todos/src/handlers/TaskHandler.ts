@@ -4,6 +4,8 @@ import { task_package } from '../generated/task';
 import { TaskRepository } from '../repositories/TaskRepository';
 import { CategoryRepository } from '../repositories/CategoryRepository';
 import { TodoRepository } from '../repositories/TodoRepository';
+import SortOrder = task_package.SortOrder;
+import SortBy = task_package.SortBy;
 
 @injectable()
 export class TaskHandler {
@@ -29,11 +31,23 @@ export class TaskHandler {
     ): Promise<task_package.GetTasksResponse> {
         try {
             const collaboratorId: string = req.collaboratorId;
-            const title: string = req.title;
-            const tasks = await this.taskRepository.findByCollaborator(collaboratorId, title);
+            const { title, sortBy, sortOrder } = req;
+            let sort = this.toSortField(sortBy);
+            const order = this.toMongooseSortOrder(sortOrder);
+
+            if (!sort) {
+                sort = 'title';
+            }
+            const sortCriteria: { [key: string]: 1 | -1 } = {};
+            sortCriteria[sort] = order;
+            const tasks = await this.taskRepository.findByCollaborator(collaboratorId, title, sortCriteria);
 
             // Convert tasks to 'task_package.GetTasksResponse' message and return
-            return task_package.GetTasksResponse.fromObject({ tasks });
+            return task_package.GetTasksResponse.fromObject({
+                tasks,
+                sortBy: this.fromSortField(sort),
+                sortOrder: this.fromMongooseSortOrder(order)
+            });
         } catch (e) {
             this.logger.error(e);
 
@@ -137,5 +151,46 @@ export class TaskHandler {
             this.logger.error(e);
             return task_package.DeleteTaskResponse.fromObject({ success: false });
         }
+    }
+
+    // Function to convert SortBy enum to a string representing the field to be sorted
+    private toSortField(sortBy: SortBy): string {
+        switch (sortBy) {
+            case SortBy.TITLE:
+                return 'title';
+            case SortBy.DATE:
+                return 'updatedAt';
+            default:
+                return 'updatedAt';
+        }
+    }
+
+    // Function to convert SortOrder enum to numeric value expected by Mongoose
+    private toMongooseSortOrder(sortOrder: SortOrder): 1 | -1 {
+        switch (sortOrder) {
+            case SortOrder.ASCENDING:
+                return 1;
+            case SortOrder.DESCENDING:
+                return -1;
+            default:
+                return 1;
+        }
+    }
+
+    // Function to convert string representing the field to SortBy enum
+    private fromSortField(sortField: string): SortBy {
+        switch (sortField.toLowerCase()) {
+            case 'title':
+                return SortBy.TITLE;
+            case 'date':
+                return SortBy.DATE;
+            default:
+                return SortBy.DATE; // Default to a sensible value
+        }
+    }
+
+    // Function to convert numeric value expected by Mongoose to SortOrder enum
+    private fromMongooseSortOrder(mongooseSortOrder: 1 | -1): SortOrder {
+        return mongooseSortOrder === 1 ? SortOrder.ASCENDING : SortOrder.DESCENDING;
     }
 }

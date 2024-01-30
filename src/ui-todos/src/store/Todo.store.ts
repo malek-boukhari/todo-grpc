@@ -6,17 +6,17 @@ const todosGateway = new TodosGateway();
 
 export interface ITodoStore {
     todos: Todo[];
-    getTodos: (taskId: string) => Promise<void>;
+    getTodos: (taskId: string, title: string) => Promise<void>;
     currentTodo: Todo | null;
     setCurrentTodo: (todo: Todo | null) => void;
-    showCreateTodo: boolean;
+    showCreateTodo: boolean; // shows create todos modal
     setShowCreateTodo: (showCreateTodo: boolean) => void;
-    showDeleteTodo: boolean;
+    showDeleteTodo: boolean; // shows delete todos modal
     setShowDeleteTodo: (showDeleteTodo: boolean) => void;
-    showEditTodo: boolean;
+    showEditTodo: boolean; // shows edit todos modal
     setShowEditTodo: (showEditTodo: boolean) => void;
-    shouldReloadTodos: boolean;
-    setShouldReloadTodos: (shouldReload: boolean) => void;
+    titleFilter: string; // Stores the title used for filtering todos in the search functionality
+    setTitleFilter: (shouldReload: string) => void;
     getTodo: (todoId: string) => Promise<Todo | null>;
     createTodo: (data: any) => Promise<Todo | null>;
     updateTodo: (todoId: string, data: Todo) => Promise<Todo | null>;
@@ -34,8 +34,8 @@ const initialState: ITodoStore = {
     setShowEditTodo: () => {},
     showDeleteTodo: false,
     setShowDeleteTodo: () => {},
-    shouldReloadTodos: false,
-    setShouldReloadTodos: () => {},
+    titleFilter: '',
+    setTitleFilter: () => {},
     getTodo: () => Promise.resolve(null),
     createTodo: () => Promise.resolve(null),
     updateTodo: () => Promise.resolve(null),
@@ -82,18 +82,18 @@ export const useTodoStore = create<ITodoStore>((set) => {
             });
         },
 
-        setShouldReloadTodos(shouldReloadTodos: boolean): void {
+        setTitleFilter(titleFilter: string): void {
             set((state: ITodoStore) => {
                 return {
                     ...state,
-                    shouldReloadTodos
+                    titleFilter
                 };
             });
         },
 
-        async getTodos(taskId: string): Promise<void> {
+        async getTodos(taskId: string, title: string): Promise<void> {
             try {
-                const resp: GetTodosResponse | null = await todosGateway.getTodos(taskId);
+                const resp: GetTodosResponse | null = await todosGateway.getTodos(taskId, title);
                 if (!resp) {
                     return;
                 }

@@ -13,8 +13,11 @@ export class TodoRepository {
         return this.mapTodoToPlainObject(todo);
     }
 
-    public async findByTaskId(taskId: string): Promise<ITodo[]> {
-        const todos = await TodoModel.find({ task: taskId });
+    public async findByTaskId(taskId: string, title: string): Promise<ITodo[]> {
+        const todos = await TodoModel.find({
+            task: taskId,
+            title: { $regex: '^' + title, $options: 'i' }
+        });
 
         return todos.map(todo => this.mapTodoToPlainObject(todo));
     }

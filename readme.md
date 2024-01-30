@@ -19,9 +19,9 @@ Set up environment variables in the .env files within the env directory.
 - `docker-compose up` to start the containers.
 
 ## Scripts
-build.sh: Script for building the project.
-copy-proto.sh: Script for copying Proto files from the shared directory to services.
-gen-proto.sh: Script for generating Proto stubs from inside the services
+- build.sh: Script for building the project.
+- copy-proto.sh: Script for copying Proto files from the shared directory to services.
+- gen-proto.sh: Script for generating Proto stubs from inside the services
 
 ## Proto Files
 Proto files for defining service interfaces are located in the services/proto directory.
@@ -29,3 +29,8 @@ Proto files for defining service interfaces are located in the services/proto di
 - `make generate` to generate Proto stubs for all services.
 - `make generate-for SERVICE=SERVICE_NAME` to generate Proto stubs for a particular service.
 - `make copy-generate` to copy Proto files and generate Proto stubs for all services.
+
+## TODO
+- [ ] Authenticate routes (the logic is already there)
+- [x] Polish ui
+- [ ] Add sort and filter todos

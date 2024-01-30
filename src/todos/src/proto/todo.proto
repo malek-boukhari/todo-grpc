@@ -36,6 +36,7 @@ message GetTodoRequest {
 
 message GetTodosRequest {
   string taskId = 1;
+  string title = 2;
 }
 
 message GetTodosResponse {

@@ -36,6 +36,18 @@ const grpc_1 = __importStar(require("@grpc/grpc-js"));
 var task_package;
 (function (task_package) {
     var _Task_one_of_decls, _PopulatedTask_one_of_decls, _GetLastUpdatedTasksRequest_one_of_decls, _GetTasksRequest_one_of_decls, _GetTasksResponse_one_of_decls, _GetTaskRequest_one_of_decls, _GetTaskResponse_one_of_decls, _CreateTaskRequest_one_of_decls, _UpdateTaskRequest_one_of_decls, _DeleteTaskRequest_one_of_decls, _DeleteTaskResponse_one_of_decls;
+    let SortBy;
+    (function (SortBy) {
+        SortBy[SortBy["SORT_UNKNOWN"] = 0] = "SORT_UNKNOWN";
+        SortBy[SortBy["TITLE"] = 1] = "TITLE";
+        SortBy[SortBy["DATE"] = 2] = "DATE";
+    })(SortBy = task_package.SortBy || (task_package.SortBy = {}));
+    let SortOrder;
+    (function (SortOrder) {
+        SortOrder[SortOrder["ORDER_UNKNOWN"] = 0] = "ORDER_UNKNOWN";
+        SortOrder[SortOrder["ASCENDING"] = 1] = "ASCENDING";
+        SortOrder[SortOrder["DESCENDING"] = 2] = "DESCENDING";
+    })(SortOrder = task_package.SortOrder || (task_package.SortOrder = {}));
     class Task extends pb_1.Message {
         constructor(data) {
             super();
@@ -554,6 +566,12 @@ var task_package;
                 if ("title" in data && data.title != undefined) {
                     this.title = data.title;
                 }
+                if ("sortBy" in data && data.sortBy != undefined) {
+                    this.sortBy = data.sortBy;
+                }
+                if ("sortOrder" in data && data.sortOrder != undefined) {
+                    this.sortOrder = data.sortOrder;
+                }
             }
         }
         get collaboratorId() {
@@ -568,6 +586,18 @@ var task_package;
         set title(value) {
             pb_1.Message.setField(this, 2, value);
         }
+        get sortBy() {
+            return pb_1.Message.getFieldWithDefault(this, 3, SortBy.SORT_UNKNOWN);
+        }
+        set sortBy(value) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get sortOrder() {
+            return pb_1.Message.getFieldWithDefault(this, 4, SortOrder.ORDER_UNKNOWN);
+        }
+        set sortOrder(value) {
+            pb_1.Message.setField(this, 4, value);
+        }
         static fromObject(data) {
             const message = new GetTasksRequest({});
             if (data.collaboratorId != null) {
@@ -575,6 +605,12 @@ var task_package;
             }
             if (data.title != null) {
                 message.title = data.title;
+            }
+            if (data.sortBy != null) {
+                message.sortBy = data.sortBy;
+            }
+            if (data.sortOrder != null) {
+                message.sortOrder = data.sortOrder;
             }
             return message;
         }
@@ -586,6 +622,12 @@ var task_package;
             if (this.title != null) {
                 data.title = this.title;
             }
+            if (this.sortBy != null) {
+                data.sortBy = this.sortBy;
+            }
+            if (this.sortOrder != null) {
+                data.sortOrder = this.sortOrder;
+            }
             return data;
         }
         serialize(w) {
@@ -594,6 +636,10 @@ var task_package;
                 writer.writeString(1, this.collaboratorId);
             if (this.title.length)
                 writer.writeString(2, this.title);
+            if (this.sortBy != SortBy.SORT_UNKNOWN)
+                writer.writeEnum(3, this.sortBy);
+            if (this.sortOrder != SortOrder.ORDER_UNKNOWN)
+                writer.writeEnum(4, this.sortOrder);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -608,6 +654,12 @@ var task_package;
                         break;
                     case 2:
                         message.title = reader.readString();
+                        break;
+                    case 3:
+                        message.sortBy = reader.readEnum();
+                        break;
+                    case 4:
+                        message.sortOrder = reader.readEnum();
                         break;
                     default: reader.skipField();
                 }
@@ -632,6 +684,12 @@ var task_package;
                 if ("tasks" in data && data.tasks != undefined) {
                     this.tasks = data.tasks;
                 }
+                if ("sortBy" in data && data.sortBy != undefined) {
+                    this.sortBy = data.sortBy;
+                }
+                if ("sortOrder" in data && data.sortOrder != undefined) {
+                    this.sortOrder = data.sortOrder;
+                }
             }
         }
         get tasks() {
@@ -640,10 +698,28 @@ var task_package;
         set tasks(value) {
             pb_1.Message.setRepeatedWrapperField(this, 1, value);
         }
+        get sortBy() {
+            return pb_1.Message.getFieldWithDefault(this, 2, SortBy.SORT_UNKNOWN);
+        }
+        set sortBy(value) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get sortOrder() {
+            return pb_1.Message.getFieldWithDefault(this, 3, SortOrder.ORDER_UNKNOWN);
+        }
+        set sortOrder(value) {
+            pb_1.Message.setField(this, 3, value);
+        }
         static fromObject(data) {
             const message = new GetTasksResponse({});
             if (data.tasks != null) {
                 message.tasks = data.tasks.map(item => PopulatedTask.fromObject(item));
+            }
+            if (data.sortBy != null) {
+                message.sortBy = data.sortBy;
+            }
+            if (data.sortOrder != null) {
+                message.sortOrder = data.sortOrder;
             }
             return message;
         }
@@ -652,12 +728,22 @@ var task_package;
             if (this.tasks != null) {
                 data.tasks = this.tasks.map((item) => item.toObject());
             }
+            if (this.sortBy != null) {
+                data.sortBy = this.sortBy;
+            }
+            if (this.sortOrder != null) {
+                data.sortOrder = this.sortOrder;
+            }
             return data;
         }
         serialize(w) {
             const writer = w || new pb_1.BinaryWriter();
             if (this.tasks.length)
                 writer.writeRepeatedMessage(1, this.tasks, (item) => item.serialize(writer));
+            if (this.sortBy != SortBy.SORT_UNKNOWN)
+                writer.writeEnum(2, this.sortBy);
+            if (this.sortOrder != SortOrder.ORDER_UNKNOWN)
+                writer.writeEnum(3, this.sortOrder);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -669,6 +755,12 @@ var task_package;
                 switch (reader.getFieldNumber()) {
                     case 1:
                         reader.readMessage(message.tasks, () => pb_1.Message.addToRepeatedWrapperField(message, 1, PopulatedTask.deserialize(reader), PopulatedTask));
+                        break;
+                    case 2:
+                        message.sortBy = reader.readEnum();
+                        break;
+                    case 3:
+                        message.sortOrder = reader.readEnum();
                         break;
                     default: reader.skipField();
                 }

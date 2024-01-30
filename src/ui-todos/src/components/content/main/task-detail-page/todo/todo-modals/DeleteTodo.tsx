@@ -2,22 +2,24 @@ import { JSX } from 'react';
 import { Modal, notification, Typography } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { errorNotification, successNotification } from '../../../../../../utils/Notifications.ts';
-import type { NotificationMessage, NotificationType } from '../../../../../../types';
+import { useTaskStore } from '../../../../../../store/Task.store.ts';
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
 import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.ts';
-import { useTaskStore } from '../../../../../../store/Task.store.ts';
+import type { NotificationMessage, NotificationType } from '../../../../../../types';
 
 function DeleteTodo(): JSX.Element {
     const { getLastUpdatedTasks } = useTaskStore();
+    const { currentTask } = useTaskStore();
+    const { setIsLoading } = useAppSettingsStore();
     const {
-        setShouldReloadTodos,
+        getTodos,
         deleteTodo,
         setShowDeleteTodo,
         showDeleteTodo,
         currentTodo,
+        titleFilter,
         setCurrentTodo
     } = useTodoStore();
-    const { setIsLoading } = useAppSettingsStore();
 
     const [api, contextHolder] = notification.useNotification();
     const { Text } = Typography;
@@ -46,7 +48,8 @@ function DeleteTodo(): JSX.Element {
 
         if (isDeleted) {
             openNotification('success', deleteTodoSuccess);
-            setShouldReloadTodos(true);
+            // refresh the todos
+            await getTodos(currentTask?.Id as string, titleFilter);
             await getLastUpdatedTasks();
         } else {
             openNotification('error', deleteTodoError);

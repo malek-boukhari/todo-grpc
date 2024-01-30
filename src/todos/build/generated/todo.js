@@ -319,6 +319,9 @@ var todo_package;
                 if ("taskId" in data && data.taskId != undefined) {
                     this.taskId = data.taskId;
                 }
+                if ("title" in data && data.title != undefined) {
+                    this.title = data.title;
+                }
             }
         }
         get taskId() {
@@ -327,10 +330,19 @@ var todo_package;
         set taskId(value) {
             pb_1.Message.setField(this, 1, value);
         }
+        get title() {
+            return pb_1.Message.getFieldWithDefault(this, 2, "");
+        }
+        set title(value) {
+            pb_1.Message.setField(this, 2, value);
+        }
         static fromObject(data) {
             const message = new GetTodosRequest({});
             if (data.taskId != null) {
                 message.taskId = data.taskId;
+            }
+            if (data.title != null) {
+                message.title = data.title;
             }
             return message;
         }
@@ -339,12 +351,17 @@ var todo_package;
             if (this.taskId != null) {
                 data.taskId = this.taskId;
             }
+            if (this.title != null) {
+                data.title = this.title;
+            }
             return data;
         }
         serialize(w) {
             const writer = w || new pb_1.BinaryWriter();
             if (this.taskId.length)
                 writer.writeString(1, this.taskId);
+            if (this.title.length)
+                writer.writeString(2, this.title);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -356,6 +373,9 @@ var todo_package;
                 switch (reader.getFieldNumber()) {
                     case 1:
                         message.taskId = reader.readString();
+                        break;
+                    case 2:
+                        message.title = reader.readString();
                         break;
                     default: reader.skipField();
                 }

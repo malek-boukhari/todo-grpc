@@ -23,8 +23,8 @@ let TodoHandler = class TodoHandler {
     }
     async getTodos(req) {
         try {
-            const taskId = req.taskId;
-            const todos = await this.todoRepository.findByTaskId(taskId);
+            const { taskId, title } = req;
+            const todos = await this.todoRepository.findByTaskId(taskId, title);
             return todo_1.todo_package.GetTodosResponse.fromObject({ todos });
         }
         catch (e) {

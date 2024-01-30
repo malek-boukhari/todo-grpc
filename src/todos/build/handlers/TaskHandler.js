@@ -18,6 +18,8 @@ const task_1 = require("../generated/task");
 const TaskRepository_1 = require("../repositories/TaskRepository");
 const CategoryRepository_1 = require("../repositories/CategoryRepository");
 const TodoRepository_1 = require("../repositories/TodoRepository");
+var SortOrder = task_1.task_package.SortOrder;
+var SortBy = task_1.task_package.SortBy;
 let TaskHandler = class TaskHandler {
     constructor(taskRepository, categoryRepository, todoRepository, logger) {
         this.taskRepository = taskRepository;
@@ -28,9 +30,20 @@ let TaskHandler = class TaskHandler {
     async getTasks(req) {
         try {
             const collaboratorId = req.collaboratorId;
-            const title = req.title;
-            const tasks = await this.taskRepository.findByCollaborator(collaboratorId, title);
-            return task_1.task_package.GetTasksResponse.fromObject({ tasks });
+            const { title, sortBy, sortOrder } = req;
+            let sort = this.toSortField(sortBy);
+            const order = this.toMongooseSortOrder(sortOrder);
+            if (!sort) {
+                sort = 'title';
+            }
+            const sortCriteria = {};
+            sortCriteria[sort] = order;
+            const tasks = await this.taskRepository.findByCollaborator(collaboratorId, title, sortCriteria);
+            return task_1.task_package.GetTasksResponse.fromObject({
+                tasks,
+                sortBy: this.fromSortField(sort),
+                sortOrder: this.fromMongooseSortOrder(order)
+            });
         }
         catch (e) {
             this.logger.error(e);
@@ -104,6 +117,39 @@ let TaskHandler = class TaskHandler {
             this.logger.error(e);
             return task_1.task_package.DeleteTaskResponse.fromObject({ success: false });
         }
+    }
+    toSortField(sortBy) {
+        switch (sortBy) {
+            case SortBy.TITLE:
+                return 'title';
+            case SortBy.DATE:
+                return 'updatedAt';
+            default:
+                return 'updatedAt';
+        }
+    }
+    toMongooseSortOrder(sortOrder) {
+        switch (sortOrder) {
+            case SortOrder.ASCENDING:
+                return 1;
+            case SortOrder.DESCENDING:
+                return -1;
+            default:
+                return 1;
+        }
+    }
+    fromSortField(sortField) {
+        switch (sortField.toLowerCase()) {
+            case 'title':
+                return SortBy.TITLE;
+            case 'date':
+                return SortBy.DATE;
+            default:
+                return SortBy.DATE;
+        }
+    }
+    fromMongooseSortOrder(mongooseSortOrder) {
+        return mongooseSortOrder === 1 ? SortOrder.ASCENDING : SortOrder.DESCENDING;
     }
 };
 exports.TaskHandler = TaskHandler;

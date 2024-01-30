@@ -18,9 +18,9 @@ export class TodoHandler {
 
     public async getTodos(req: todo_package.GetTodosRequest) {
         try {
-            const taskId = req.taskId;
+            const { taskId, title} = req;
 
-            const todos = await this.todoRepository.findByTaskId(taskId);
+            const todos = await this.todoRepository.findByTaskId(taskId, title);
             return todo_package.GetTodosResponse.fromObject({ todos });
         } catch (e) {
             this.logger.error(e);

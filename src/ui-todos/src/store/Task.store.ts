@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import { TasksGateway } from '../api/gateways/TasksGateway.ts';
-import { GetTasksResponse, Task, PopulatedTask } from '../generated/task_pb.ts';
+import { GetTasksResponse, Task, PopulatedTask, SortBy, SortOrder } from '../generated/task_pb.ts';
 import { fetchByKey } from '../utils/storage.ts';
+import type { SortCriteria } from '../types';
 
 const tasksGateway = new TasksGateway();
 
 export interface ITaskStore {
     tasks: PopulatedTask[];
-    getTasks: (title: string) => Promise<void>;
+    getTasks: (title: string, sortCriteria?: SortCriteria) => Promise<void>;
     lastUpdatedTasks: PopulatedTask[];
     getLastUpdatedTasks: () => Promise<void>;
     currentTask: PopulatedTask | null; // set when a task is being edited/ deleted
@@ -83,15 +84,26 @@ export const useTaskStore = create<ITaskStore>((set) => {
             });
         },
 
-        async getTasks(title: string = ''): Promise<void> {
+        async getTasks(title: string = '', sortCriteria?: SortCriteria): Promise<void> {
             try {
                 const user = fetchByKey('user');
                 if (!user) {
                     return;
                 }
 
+                // Ensure sortCriteria is defined
+                const resolvedSortCriteria: SortCriteria = sortCriteria || {
+                    sortBy: SortBy.DATE,
+                    sortOrder: SortOrder.DESCENDING
+                };
+
                 const userId = user.Id;
-                const resp: GetTasksResponse | null = await tasksGateway.getTasks(userId, title);
+                const resp: GetTasksResponse | null = await tasksGateway.getTasks(
+                    userId,
+                    title,
+                    resolvedSortCriteria
+                );
+
                 if (!resp) {
                     return;
                 }

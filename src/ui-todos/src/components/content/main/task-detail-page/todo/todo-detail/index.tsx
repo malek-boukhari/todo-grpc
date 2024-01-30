@@ -4,7 +4,8 @@ import Typography from 'antd/es/typography';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.ts';
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
-import { mapStatusToString, priorityIcon } from '../../../../../../utils/mappers.tsx';
+import { useTaskStore } from '../../../../../../store/Task.store.ts';
+import { mapStatusToString, priorityIcon } from '../../../../../../utils/enumMappers.tsx';
 import { TodoStatus } from '../../../../../../generated/todo_pb.ts';
 import { errorNotification } from '../../../../../../utils/Notifications.ts';
 import extendedDayJs from '../../../../../../config/dayjs.ts';
@@ -12,9 +13,16 @@ import styles from './styles.module.css';
 
 function TodoDetail(props: any): JSX.Element {
     const { todo } = props;
+    const { currentTask } = useTaskStore();
     const { setIsLoading } = useAppSettingsStore();
-    const { setShouldReloadTodos, updateTodo, setCurrentTodo, setShowDeleteTodo, setShowEditTodo } =
-        useTodoStore();
+    const {
+        getTodos,
+        updateTodo,
+        titleFilter,
+        setCurrentTodo,
+        setShowDeleteTodo,
+        setShowEditTodo
+    } = useTodoStore();
 
     const [api, contextHolder] = notification.useNotification();
     const { token } = theme.useToken();
@@ -38,24 +46,22 @@ function TodoDetail(props: any): JSX.Element {
         setShowEditTodo(true);
     }
 
+    function getUpdatedStatus(currentStatus: number): number {
+        switch (currentStatus) {
+            case TodoStatus.NEW:
+                return TodoStatus.IN_PROGRESS;
+            case TodoStatus.IN_PROGRESS:
+                return TodoStatus.DONE;
+            case TodoStatus.DONE:
+                return TodoStatus.NEW;
+            default:
+                return TodoStatus.NEW; // Default to NEW if not in the expected cases
+        }
+    }
+
     async function editStatus(): Promise<void> {
         setIsLoading(true);
-
-        let newStatus = TodoStatus.NEW; // Default to NEW if not in the expected cases
-
-        switch (todo.status) {
-            case TodoStatus.NEW:
-                newStatus = TodoStatus.IN_PROGRESS;
-                break;
-            case TodoStatus.IN_PROGRESS:
-                newStatus = TodoStatus.DONE;
-                break;
-            case TodoStatus.DONE:
-                newStatus = TodoStatus.NEW;
-                break;
-            default:
-                break;
-        }
+        const newStatus = getUpdatedStatus(todo.status);
 
         try {
             await updateTodo(todo.Id, {
@@ -63,11 +69,10 @@ function TodoDetail(props: any): JSX.Element {
                 status: newStatus
             });
 
-            // After successful update, setShouldReloadTodos to refresh the list
-            setShouldReloadTodos(true);
+            // After successful update, refresh the todos
+            await getTodos(currentTask?.Id as string, titleFilter);
             setIsLoading(false);
         } catch (error) {
-            // Handle error (e.g., show notification)
             console.error('Error updating todo status:', error);
             openNotificationError();
         }

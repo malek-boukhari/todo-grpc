@@ -29,11 +29,12 @@ let TaskRepository = class TaskRepository {
     async findByOwner(userId) {
         return Task_1.TaskModel.find({ user: userId }).select('_id');
     }
-    async findByCollaborator(collaboratorId, title) {
+    async findByCollaborator(collaboratorId, title, sortCriteria) {
         const tasks = await Task_1.TaskModel.find({
             collaborators: collaboratorId,
             title: { $regex: '^' + title, $options: 'i' }
         })
+            .sort(sortCriteria)
             .populate('collaborators')
             .populate('category');
         return tasks.map(this.mapTaskToPlainObject);

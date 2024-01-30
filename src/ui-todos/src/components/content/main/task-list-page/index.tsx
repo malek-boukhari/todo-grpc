@@ -1,11 +1,11 @@
 import type { JSX } from 'react';
 import TaskList from './task-list';
-import SearchTasks from './SearchTasks.tsx';
+import TaskListControls from './task-list-controls';
 
 function TaskListPage(): JSX.Element {
     return (
         <>
-            <SearchTasks />
+            <TaskListControls />
             <TaskList />
         </>
     );

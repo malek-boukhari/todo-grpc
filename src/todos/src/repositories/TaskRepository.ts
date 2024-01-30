@@ -31,12 +31,14 @@ export class TaskRepository {
 
     public async findByCollaborator(
         collaboratorId: string,
-        title: string
+        title: string,
+        sortCriteria: { [key: string]: 1 | -1 }
     ): Promise<IPopulatedTask[]> {
         const tasks = await TaskModel.find({
             collaborators: collaboratorId,
             title: { $regex: '^' + title, $options: 'i' }
         })
+            .sort(sortCriteria)
             .populate('collaborators')
             .populate('category');
 

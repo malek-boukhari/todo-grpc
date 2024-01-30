@@ -1,0 +1,13 @@
+.wrapper {
+    max-width: 416px;
+    display: flex;
+    gap: 16px;
+}
+
+.searchInput {
+    margin-bottom: 0;
+}
+
+.sortSelection {
+    width: 100%;
+}

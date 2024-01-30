@@ -18,8 +18,11 @@ let TodoRepository = class TodoRepository {
         }
         return this.mapTodoToPlainObject(todo);
     }
-    async findByTaskId(taskId) {
-        const todos = await Todo_1.TodoModel.find({ task: taskId });
+    async findByTaskId(taskId, title) {
+        const todos = await Todo_1.TodoModel.find({
+            task: taskId,
+            title: { $regex: '^' + title, $options: 'i' }
+        });
         return todos.map(todo => this.mapTodoToPlainObject(todo));
     }
     async createOne(todo) {

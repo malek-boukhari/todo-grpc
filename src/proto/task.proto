@@ -36,13 +36,29 @@ message GetLastUpdatedTasksRequest {
   string collaboratorId = 1;
 }
 
+enum SortBy {
+  SORT_UNKNOWN = 0;
+  TITLE = 1;
+  DATE = 2;
+}
+
+enum SortOrder {
+  ORDER_UNKNOWN = 0;
+  ASCENDING = 1;
+  DESCENDING = 2;
+}
+
 message GetTasksRequest {
   string collaboratorId = 1;
   string title = 2;
+  SortBy sortBy = 3;
+  SortOrder sortOrder = 4;
 }
 
 message GetTasksResponse {
   repeated PopulatedTask tasks = 1;
+  SortBy sortBy = 2;
+  SortOrder sortOrder = 3;
 }
 
 message GetTaskRequest {

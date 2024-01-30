@@ -15,3 +15,12 @@ declare module 'dayjs' {
         toNow(): string;
     }
 }
+
+export type SortByType = 0 | 1 | 2;
+
+export type SortOrderType = 0 | 1 | 2;
+
+export type SortCriteria = {
+    sortBy: SortByType;
+    sortOrder: SortOrderType;
+};

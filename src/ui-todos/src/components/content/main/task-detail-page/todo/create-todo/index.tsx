@@ -7,13 +7,13 @@ import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.t
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
 import { useUserStore } from '../../../../../../store/User.store.ts';
 import { TodoPriority, TodoStatus } from '../../../../../../generated/todo_pb.ts';
-import { priorityIcon } from '../../../../../../utils/mappers.tsx';
+import { priorityIcon } from '../../../../../../utils/enumMappers.tsx';
 import styles from './styles.module.css';
 
 function CreateTodo(): JSX.Element {
     const { currentTask, getLastUpdatedTasks } = useTaskStore();
     const { currentUser } = useUserStore();
-    const { createTodo, setShouldReloadTodos, setShowCreateTodo, showCreateTodo } = useTodoStore();
+    const { createTodo, getTodos, setShowCreateTodo, showCreateTodo, titleFilter } = useTodoStore();
     const { setIsLoading } = useAppSettingsStore();
 
     const [title, setTitle] = useState('');
@@ -53,7 +53,8 @@ function CreateTodo(): JSX.Element {
         };
 
         await createTodo(newTodo);
-        setShouldReloadTodos(true);
+        // After successful creation, refresh the todos
+        await getTodos(currentTask?.Id as string, titleFilter);
         await getLastUpdatedTasks();
         setIsLoading(false);
 

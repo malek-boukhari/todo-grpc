@@ -110,7 +110,7 @@ export const useCategoryStore = create<ICategoryStore>((set) => {
 
         async deleteCategory(id: string): Promise<boolean> {
             const resp = await categoriesGateway.deleteCategory(id);
-            console.log(resp);
+
             if (!resp) {
                 return false;
             }

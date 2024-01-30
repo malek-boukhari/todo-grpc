@@ -1,15 +1,15 @@
 import { JSX, useEffect } from 'react';
 import { Divider } from 'antd';
+import { useParams } from 'react-router';
+import { useTaskStore } from '../../../../store/Task.store.ts';
+import { useAppSettingsStore } from '../../../../store/AppSettings.store.ts';
 import TodoList from './todo/todo-list';
 import TaskMetadata from './task/task-metadata';
 import DeleteTodo from './todo/todo-modals/DeleteTodo.tsx';
 import DeleteTask from './task/task-modals/DeleteTask.tsx';
 import EditTaskMetadata from './task/task-modals/EditTaskMetadata.tsx';
 import EditTodo from './todo/todo-modals/EditTodo.tsx';
-import { useParams } from 'react-router';
-import { useTaskStore } from '../../../../store/Task.store.ts';
 import { PopulatedTask } from '../../../../generated/task_pb.ts';
-import { useAppSettingsStore } from '../../../../store/AppSettings.store.ts';
 
 function TaskDetailPage(): JSX.Element {
     const { id } = useParams(); // Get the task ID from the URL params

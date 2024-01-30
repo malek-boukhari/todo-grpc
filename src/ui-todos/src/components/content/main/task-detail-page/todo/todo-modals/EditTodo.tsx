@@ -3,21 +3,24 @@ import { Button, Input, Modal, notification, Select, Space, Typography } from 'a
 import { TodoPriority, TodoStatus } from '../../../../../../generated/todo_pb.ts';
 import { useUserStore } from '../../../../../../store/User.store.ts';
 import { useAppSettingsStore } from '../../../../../../store/AppSettings.store.ts';
+import { useTaskStore } from '../../../../../../store/Task.store.ts';
 import { errorNotification, successNotification } from '../../../../../../utils/Notifications.ts';
 import { useTodoStore } from '../../../../../../store/Todo.store.ts';
-import { priorityIcon } from '../../../../../../utils/mappers.tsx';
+import { priorityIcon } from '../../../../../../utils/enumMappers.tsx';
 import type { NotificationMessage, NotificationType } from '../../../../../../types';
 
 function EditTodo(): JSX.Element {
     const { currentUser } = useUserStore();
+    const { currentTask } = useTaskStore();
     const { setIsLoading } = useAppSettingsStore();
     const {
         currentTodo,
         setCurrentTodo,
         setShowEditTodo,
-        setShouldReloadTodos,
+        getTodos,
         showEditTodo,
-        updateTodo
+        updateTodo,
+        titleFilter
     } = useTodoStore();
 
     const [title, setTitle] = useState('');
@@ -95,7 +98,9 @@ function EditTodo(): JSX.Element {
         }
 
         openNotification('success', editTodoSuccess);
-        setShouldReloadTodos(true);
+
+        // After successful update, refresh the todos
+        await getTodos(currentTask?.Id as string, titleFilter);
     }
 
     return (

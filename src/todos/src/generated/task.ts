@@ -8,6 +8,16 @@ import * as dependency_2 from "./user";
 import * as pb_1 from "google-protobuf";
 import * as grpc_1 from "@grpc/grpc-js";
 export namespace task_package {
+    export enum SortBy {
+        SORT_UNKNOWN = 0,
+        TITLE = 1,
+        DATE = 2
+    }
+    export enum SortOrder {
+        ORDER_UNKNOWN = 0,
+        ASCENDING = 1,
+        DESCENDING = 2
+    }
     export class Task extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
@@ -585,6 +595,8 @@ export namespace task_package {
         constructor(data?: any[] | {
             collaboratorId?: string;
             title?: string;
+            sortBy?: SortBy;
+            sortOrder?: SortOrder;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -594,6 +606,12 @@ export namespace task_package {
                 }
                 if ("title" in data && data.title != undefined) {
                     this.title = data.title;
+                }
+                if ("sortBy" in data && data.sortBy != undefined) {
+                    this.sortBy = data.sortBy;
+                }
+                if ("sortOrder" in data && data.sortOrder != undefined) {
+                    this.sortOrder = data.sortOrder;
                 }
             }
         }
@@ -609,9 +627,23 @@ export namespace task_package {
         set title(value: string) {
             pb_1.Message.setField(this, 2, value);
         }
+        get sortBy() {
+            return pb_1.Message.getFieldWithDefault(this, 3, SortBy.SORT_UNKNOWN) as SortBy;
+        }
+        set sortBy(value: SortBy) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get sortOrder() {
+            return pb_1.Message.getFieldWithDefault(this, 4, SortOrder.ORDER_UNKNOWN) as SortOrder;
+        }
+        set sortOrder(value: SortOrder) {
+            pb_1.Message.setField(this, 4, value);
+        }
         static fromObject(data: {
             collaboratorId?: string;
             title?: string;
+            sortBy?: SortBy;
+            sortOrder?: SortOrder;
         }): GetTasksRequest {
             const message = new GetTasksRequest({});
             if (data.collaboratorId != null) {
@@ -620,18 +652,32 @@ export namespace task_package {
             if (data.title != null) {
                 message.title = data.title;
             }
+            if (data.sortBy != null) {
+                message.sortBy = data.sortBy;
+            }
+            if (data.sortOrder != null) {
+                message.sortOrder = data.sortOrder;
+            }
             return message;
         }
         toObject() {
             const data: {
                 collaboratorId?: string;
                 title?: string;
+                sortBy?: SortBy;
+                sortOrder?: SortOrder;
             } = {};
             if (this.collaboratorId != null) {
                 data.collaboratorId = this.collaboratorId;
             }
             if (this.title != null) {
                 data.title = this.title;
+            }
+            if (this.sortBy != null) {
+                data.sortBy = this.sortBy;
+            }
+            if (this.sortOrder != null) {
+                data.sortOrder = this.sortOrder;
             }
             return data;
         }
@@ -643,6 +689,10 @@ export namespace task_package {
                 writer.writeString(1, this.collaboratorId);
             if (this.title.length)
                 writer.writeString(2, this.title);
+            if (this.sortBy != SortBy.SORT_UNKNOWN)
+                writer.writeEnum(3, this.sortBy);
+            if (this.sortOrder != SortOrder.ORDER_UNKNOWN)
+                writer.writeEnum(4, this.sortOrder);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -657,6 +707,12 @@ export namespace task_package {
                         break;
                     case 2:
                         message.title = reader.readString();
+                        break;
+                    case 3:
+                        message.sortBy = reader.readEnum();
+                        break;
+                    case 4:
+                        message.sortOrder = reader.readEnum();
                         break;
                     default: reader.skipField();
                 }
@@ -674,12 +730,20 @@ export namespace task_package {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             tasks?: PopulatedTask[];
+            sortBy?: SortBy;
+            sortOrder?: SortOrder;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
                 if ("tasks" in data && data.tasks != undefined) {
                     this.tasks = data.tasks;
+                }
+                if ("sortBy" in data && data.sortBy != undefined) {
+                    this.sortBy = data.sortBy;
+                }
+                if ("sortOrder" in data && data.sortOrder != undefined) {
+                    this.sortOrder = data.sortOrder;
                 }
             }
         }
@@ -689,21 +753,49 @@ export namespace task_package {
         set tasks(value: PopulatedTask[]) {
             pb_1.Message.setRepeatedWrapperField(this, 1, value);
         }
+        get sortBy() {
+            return pb_1.Message.getFieldWithDefault(this, 2, SortBy.SORT_UNKNOWN) as SortBy;
+        }
+        set sortBy(value: SortBy) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get sortOrder() {
+            return pb_1.Message.getFieldWithDefault(this, 3, SortOrder.ORDER_UNKNOWN) as SortOrder;
+        }
+        set sortOrder(value: SortOrder) {
+            pb_1.Message.setField(this, 3, value);
+        }
         static fromObject(data: {
             tasks?: ReturnType<typeof PopulatedTask.prototype.toObject>[];
+            sortBy?: SortBy;
+            sortOrder?: SortOrder;
         }): GetTasksResponse {
             const message = new GetTasksResponse({});
             if (data.tasks != null) {
                 message.tasks = data.tasks.map(item => PopulatedTask.fromObject(item));
+            }
+            if (data.sortBy != null) {
+                message.sortBy = data.sortBy;
+            }
+            if (data.sortOrder != null) {
+                message.sortOrder = data.sortOrder;
             }
             return message;
         }
         toObject() {
             const data: {
                 tasks?: ReturnType<typeof PopulatedTask.prototype.toObject>[];
+                sortBy?: SortBy;
+                sortOrder?: SortOrder;
             } = {};
             if (this.tasks != null) {
                 data.tasks = this.tasks.map((item: PopulatedTask) => item.toObject());
+            }
+            if (this.sortBy != null) {
+                data.sortBy = this.sortBy;
+            }
+            if (this.sortOrder != null) {
+                data.sortOrder = this.sortOrder;
             }
             return data;
         }
@@ -713,6 +805,10 @@ export namespace task_package {
             const writer = w || new pb_1.BinaryWriter();
             if (this.tasks.length)
                 writer.writeRepeatedMessage(1, this.tasks, (item: PopulatedTask) => item.serialize(writer));
+            if (this.sortBy != SortBy.SORT_UNKNOWN)
+                writer.writeEnum(2, this.sortBy);
+            if (this.sortOrder != SortOrder.ORDER_UNKNOWN)
+                writer.writeEnum(3, this.sortOrder);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -724,6 +820,12 @@ export namespace task_package {
                 switch (reader.getFieldNumber()) {
                     case 1:
                         reader.readMessage(message.tasks, () => pb_1.Message.addToRepeatedWrapperField(message, 1, PopulatedTask.deserialize(reader), PopulatedTask));
+                        break;
+                    case 2:
+                        message.sortBy = reader.readEnum();
+                        break;
+                    case 3:
+                        message.sortOrder = reader.readEnum();
                         break;
                     default: reader.skipField();
                 }

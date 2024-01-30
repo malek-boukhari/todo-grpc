@@ -317,12 +317,16 @@ export namespace todo_package {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             taskId?: string;
+            title?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
                 if ("taskId" in data && data.taskId != undefined) {
                     this.taskId = data.taskId;
+                }
+                if ("title" in data && data.title != undefined) {
+                    this.title = data.title;
                 }
             }
         }
@@ -332,21 +336,35 @@ export namespace todo_package {
         set taskId(value: string) {
             pb_1.Message.setField(this, 1, value);
         }
+        get title() {
+            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+        }
+        set title(value: string) {
+            pb_1.Message.setField(this, 2, value);
+        }
         static fromObject(data: {
             taskId?: string;
+            title?: string;
         }): GetTodosRequest {
             const message = new GetTodosRequest({});
             if (data.taskId != null) {
                 message.taskId = data.taskId;
+            }
+            if (data.title != null) {
+                message.title = data.title;
             }
             return message;
         }
         toObject() {
             const data: {
                 taskId?: string;
+                title?: string;
             } = {};
             if (this.taskId != null) {
                 data.taskId = this.taskId;
+            }
+            if (this.title != null) {
+                data.title = this.title;
             }
             return data;
         }
@@ -356,6 +374,8 @@ export namespace todo_package {
             const writer = w || new pb_1.BinaryWriter();
             if (this.taskId.length)
                 writer.writeString(1, this.taskId);
+            if (this.title.length)
+                writer.writeString(2, this.title);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -367,6 +387,9 @@ export namespace todo_package {
                 switch (reader.getFieldNumber()) {
                     case 1:
                         message.taskId = reader.readString();
+                        break;
+                    case 2:
+                        message.title = reader.readString();
                         break;
                     default: reader.skipField();
                 }

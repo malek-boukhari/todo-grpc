@@ -35,9 +35,9 @@ export class TodosGateway {
         }
     }
 
-    async getTodos(taskId: string): Promise<GetTodosResponse | null> {
+    async getTodos(taskId: string, title: string): Promise<GetTodosResponse | null> {
         try {
-            const request = new GetTodosRequest({ taskId });
+            const request = new GetTodosRequest({ taskId, title });
 
             return await this.client.getTodos(request);
         } catch (e) {

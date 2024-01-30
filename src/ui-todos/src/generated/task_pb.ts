@@ -12,6 +12,58 @@ import { User } from "./user_pb.js";
 import { Category } from "./category_pb.js";
 
 /**
+ * @generated from enum task_package.SortBy
+ */
+export enum SortBy {
+  /**
+   * @generated from enum value: SORT_UNKNOWN = 0;
+   */
+  SORT_UNKNOWN = 0,
+
+  /**
+   * @generated from enum value: TITLE = 1;
+   */
+  TITLE = 1,
+
+  /**
+   * @generated from enum value: DATE = 2;
+   */
+  DATE = 2,
+}
+// Retrieve enum metadata with: proto3.getEnumType(SortBy)
+proto3.util.setEnumType(SortBy, "task_package.SortBy", [
+  { no: 0, name: "SORT_UNKNOWN" },
+  { no: 1, name: "TITLE" },
+  { no: 2, name: "DATE" },
+]);
+
+/**
+ * @generated from enum task_package.SortOrder
+ */
+export enum SortOrder {
+  /**
+   * @generated from enum value: ORDER_UNKNOWN = 0;
+   */
+  ORDER_UNKNOWN = 0,
+
+  /**
+   * @generated from enum value: ASCENDING = 1;
+   */
+  ASCENDING = 1,
+
+  /**
+   * @generated from enum value: DESCENDING = 2;
+   */
+  DESCENDING = 2,
+}
+// Retrieve enum metadata with: proto3.getEnumType(SortOrder)
+proto3.util.setEnumType(SortOrder, "task_package.SortOrder", [
+  { no: 0, name: "ORDER_UNKNOWN" },
+  { no: 1, name: "ASCENDING" },
+  { no: 2, name: "DESCENDING" },
+]);
+
+/**
  * @generated from message task_package.Task
  */
 export class Task extends Message<Task> {
@@ -232,6 +284,16 @@ export class GetTasksRequest extends Message<GetTasksRequest> {
    */
   title = "";
 
+  /**
+   * @generated from field: task_package.SortBy sortBy = 3;
+   */
+  sortBy = SortBy.SORT_UNKNOWN;
+
+  /**
+   * @generated from field: task_package.SortOrder sortOrder = 4;
+   */
+  sortOrder = SortOrder.ORDER_UNKNOWN;
+
   constructor(data?: PartialMessage<GetTasksRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -242,6 +304,8 @@ export class GetTasksRequest extends Message<GetTasksRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "collaboratorId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "title", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "sortBy", kind: "enum", T: proto3.getEnumType(SortBy) },
+    { no: 4, name: "sortOrder", kind: "enum", T: proto3.getEnumType(SortOrder) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTasksRequest {
@@ -270,6 +334,16 @@ export class GetTasksResponse extends Message<GetTasksResponse> {
    */
   tasks: PopulatedTask[] = [];
 
+  /**
+   * @generated from field: task_package.SortBy sortBy = 2;
+   */
+  sortBy = SortBy.SORT_UNKNOWN;
+
+  /**
+   * @generated from field: task_package.SortOrder sortOrder = 3;
+   */
+  sortOrder = SortOrder.ORDER_UNKNOWN;
+
   constructor(data?: PartialMessage<GetTasksResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -279,6 +353,8 @@ export class GetTasksResponse extends Message<GetTasksResponse> {
   static readonly typeName = "task_package.GetTasksResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "tasks", kind: "message", T: PopulatedTask, repeated: true },
+    { no: 2, name: "sortBy", kind: "enum", T: proto3.getEnumType(SortBy) },
+    { no: 3, name: "sortOrder", kind: "enum", T: proto3.getEnumType(SortOrder) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTasksResponse {
