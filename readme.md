@@ -11,9 +11,6 @@ A user-friendly todo app using gRPC, React and Node.js with typescript
 - docker
 - docker compose
 
-## Environment Configuration
-Set up environment variables in the .env files within the env directory.
-
 ## Build steps
 - `make copy-and-build` to copy the proto files from src/proto directory and build the project.
 - `docker-compose up` to start the containers.
