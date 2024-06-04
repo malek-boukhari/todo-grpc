@@ -13,7 +13,7 @@ function TaskList(): JSX.Element {
     const { Text, Title } = Typography;
 
     function findTaskOwner(task: PopulatedTask): string {
-        const owner = task?.collaborators.find((collaborator) => (collaborator.Id = task?.user));
+        const owner = task?.collaborators.find((collaborator) => (collaborator.Id === task?.user));
 
         return owner?.username ?? '';
     }
